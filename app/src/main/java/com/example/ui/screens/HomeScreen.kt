@@ -57,7 +57,12 @@ class HomeViewModel : ViewModel() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = viewModel(), playerViewModel: MusicPlayerViewModel) {
+fun HomeScreen(
+    viewModel: HomeViewModel = viewModel(), 
+    playerViewModel: MusicPlayerViewModel,
+    onNavigateToSearch: () -> Unit,
+    onNavigateToProfile: () -> Unit
+) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -78,14 +83,17 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel(), playerViewModel: MusicPla
                 }
             },
             actions = {
-                Icon(Icons.Filled.Search, contentDescription = "Search", modifier = Modifier.padding(end = 16.dp), tint = MaterialTheme.colorScheme.onBackground)
+                IconButton(onClick = onNavigateToSearch) {
+                    Icon(Icons.Filled.Search, contentDescription = "Search", tint = MaterialTheme.colorScheme.onBackground)
+                }
                 Box(
                     modifier = Modifier
-                        .padding(end = 16.dp)
+                        .padding(end = 16.dp, start = 8.dp)
                         .size(28.dp)
                         .clip(CircleShape)
                         .background(Brush.linearGradient(listOf(Color(0xFF3B82F6), Color(0xFF34D399))))
-                        .border(1.dp, BorderColor, CircleShape),
+                        .border(1.dp, BorderColor, CircleShape)
+                        .clickable { onNavigateToProfile() },
                     contentAlignment = Alignment.Center
                 ) {
                     Text("AJ", color = Color.White, style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold))
@@ -97,8 +105,10 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel(), playerViewModel: MusicPla
             contentPadding = PaddingValues(bottom = 100.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            item { FilterChips() }
-            item { GeminiPromptCard() }
+            item { FilterChips(onChipClick = { onNavigateToSearch() }) }
+            item { GeminiPromptCard(onClick = { 
+                android.widget.Toast.makeText(context, "Tap the AI wand below to start!", android.widget.Toast.LENGTH_SHORT).show()
+            }) }
             if (viewModel.popTracks.isNotEmpty()) {
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -157,19 +167,25 @@ fun ITunesTrack.toMediaItem() = MediaItem(
 )
 
 @Composable
-fun FilterChips() {
+fun FilterChips(onChipClick: (String) -> Unit) {
     val chips = listOf("Energize", "Workout", "Relax", "Commute", "Focus")
+    var selectedIndex by remember { mutableStateOf(0) }
+    
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(chips.size) { index ->
-            val isSelected = index == 0
+            val isSelected = index == selectedIndex
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .background(if (isSelected) Color.White else BorderColor)
                     .border(1.dp, if (isSelected) Color.Transparent else BorderColor, RoundedCornerShape(8.dp))
+                    .clickable { 
+                        selectedIndex = index
+                        onChipClick(chips[index]) 
+                    }
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             ) {
                 Text(
@@ -183,7 +199,7 @@ fun FilterChips() {
 }
 
 @Composable
-fun GeminiPromptCard() {
+fun GeminiPromptCard(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -191,6 +207,7 @@ fun GeminiPromptCard() {
             .clip(RoundedCornerShape(16.dp))
             .background(Brush.linearGradient(listOf(Color(0xFF1a1a2e), Color(0xFF0a0a0a))))
             .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
+            .clickable { onClick() }
             .padding(20.dp)
     ) {
         Column {

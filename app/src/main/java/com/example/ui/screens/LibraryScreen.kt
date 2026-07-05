@@ -8,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.PlaylistPlay
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,11 +46,19 @@ fun LibraryScreen(
         Text("Your Library", style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold), color = Color.White)
         Spacer(modifier = Modifier.height(24.dp))
 
-        LibraryItem(Icons.Filled.PlaylistPlay, "Playlists", "Create playlists")
+        val context = androidx.compose.ui.platform.LocalContext.current
+        
+        LibraryItem(Icons.AutoMirrored.Filled.PlaylistPlay, "Playlists", "Create playlists") {
+            android.widget.Toast.makeText(context, "Playlists feature coming to Blossom Premium", android.widget.Toast.LENGTH_SHORT).show()
+        }
         Spacer(modifier = Modifier.height(16.dp))
-        LibraryItem(Icons.Filled.History, "Recent", "View recent tracks")
+        LibraryItem(Icons.Filled.History, "Recent", "View recent tracks") {
+            android.widget.Toast.makeText(context, "Recent history is synced", android.widget.Toast.LENGTH_SHORT).show()
+        }
         Spacer(modifier = Modifier.height(16.dp))
-        LibraryItem(Icons.Filled.Favorite, "Liked Songs", "Save your favorites")
+        LibraryItem(Icons.Filled.Favorite, "Liked Songs", "Save your favorites") {
+            android.widget.Toast.makeText(context, "Syncing your favorites...", android.widget.Toast.LENGTH_SHORT).show()
+        }
         
         Spacer(modifier = Modifier.height(32.dp))
         Text("Recommended for You", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = Color.White)
@@ -88,11 +96,11 @@ fun LibraryScreen(
 }
 
 @Composable
-fun LibraryItem(icon: ImageVector, title: String, subtitle: String) {
+fun LibraryItem(icon: ImageVector, title: String, subtitle: String, onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .bouncyClickable { }
+            .bouncyClickable { onClick() }
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

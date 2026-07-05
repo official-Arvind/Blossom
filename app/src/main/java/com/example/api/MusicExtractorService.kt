@@ -13,33 +13,23 @@ import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 @JsonClass(generateAdapter = true)
-data class ITunesResponse(
-    val resultCount: Int,
-    val results: List<ITunesTrack>
+data class SaavnSong(
+    val id: String?,
+    val title: String?,
+    val subtitle: String?,
+    val image: String?,
+    val url: String?
 )
 
-@JsonClass(generateAdapter = true)
-data class ITunesTrack(
-    val trackId: Long,
-    val trackName: String?,
-    val artistName: String?,
-    val collectionName: String?,
-    val artworkUrl100: String?,
-    val previewUrl: String?
-)
-
-interface ITunesApiService {
-    @GET("search")
-    suspend fun searchTracks(
-        @Query("term") term: String,
-        @Query("media") media: String = "music",
-        @Query("entity") entity: String = "song",
-        @Query("limit") limit: Int = 10
-    ): ITunesResponse
+interface MusicExtractorApi {
+    @GET("search/songs")
+    suspend fun searchSongs(
+        @Query("query") query: String
+    ): List<SaavnSong>
 }
 
-object ITunesRetrofitClient {
-    private const val BASE_URL = "https://itunes.apple.com/"
+object MusicExtractorClient {
+    private const val BASE_URL = "https://saavn-api.vercel.app/"
 
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -50,20 +40,29 @@ object ITunesRetrofitClient {
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    val service: ITunesApiService by lazy {
+    val service: MusicExtractorApi by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-            .create(ITunesApiService::class.java)
+            .create(MusicExtractorApi::class.java)
     }
 }
 
 suspend fun fetchRealMusic(query: String): List<ITunesTrack> = withContext(Dispatchers.IO) {
     try {
-        val response = ITunesRetrofitClient.service.searchTracks(query)
-        response.results
+        val response = MusicExtractorClient.service.searchSongs(query)
+        response.map {
+            ITunesTrack(
+                trackId = it.id?.hashCode()?.toLong() ?: 0L,
+                trackName = it.title?.replace("&quot;", "\""),
+                artistName = it.subtitle?.split("-")?.firstOrNull()?.trim(),
+                collectionName = "Single",
+                artworkUrl100 = it.image?.replace("50x50", "500x500")?.replace("150x150", "500x500"),
+                previewUrl = it.url
+            )
+        }
     } catch (e: Exception) {
         emptyList()
     }

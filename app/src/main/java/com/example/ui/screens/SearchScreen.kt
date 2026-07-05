@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.api.ITunesApiService
 import com.example.api.ITunesTrack
 import com.example.ui.components.bouncyClickable
 import com.example.ui.viewmodels.MusicPlayerViewModel
@@ -36,7 +35,7 @@ class SearchViewModel : ViewModel() {
         isLoading = true
         viewModelScope.launch {
             try {
-                searchResults = com.example.api.ITunesRetrofitClient.service.searchTracks(searchQuery).results
+                searchResults = com.example.api.fetchRealMusic(searchQuery)
             } catch (e: Exception) {
                 searchResults = emptyList()
             } finally {

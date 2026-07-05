@@ -174,7 +174,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Divider(color = Color.LightGray.copy(alpha = 0.5f))
+                HorizontalDivider(color = Color.LightGray.copy(alpha = 0.5f))
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(

@@ -66,23 +66,38 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Generate Tag
+      - name: Generate Tag and Changelog
         id: generate_tag
         run: |
           TAG="v1.0.${{ github.run_number }}"
           echo "tag=$TAG" >> $GITHUB_OUTPUT
+          
+          # Generate Changelog
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "## 🚀 Blossom Release $TAG" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "**Built by Jigar Corporation Pvt Ltd**" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "### ⚡ Recent Changes:" >> $GITHUB_OUTPUT
+          git log -5 --pretty=format:"- %s" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Download APK Artifact
         uses: actions/download-artifact@v4
         with:
           name: app-debug-apk
 
+      - name: Rename APK
+        run: mv app-debug.apk Blossom-v1.0.${{ github.run_number }}-Gold.apk
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.generate_tag.outputs.tag }}
-          name: Release ${{ steps.generate_tag.outputs.tag }}
-          files: app-debug.apk
-          generate_release_notes: true
+          name: Blossom Release ${{ steps.generate_tag.outputs.tag }} Gold
+          body: ${{ steps.generate_tag.outputs.changelog }}
+          files: Blossom-v1.0.${{ github.run_number }}-Gold.apk
+          generate_release_notes: false
           draft: false
           prerelease: false
