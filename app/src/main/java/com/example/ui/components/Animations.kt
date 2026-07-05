@@ -37,6 +37,7 @@ fun Modifier.bouncyClickable(
             enabled = enabled,
             onClick = {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
+                view.performHapticFeedback(android.view.HapticFeedbackConstants.CONTEXT_CLICK)
                 onClick()
             }
         )

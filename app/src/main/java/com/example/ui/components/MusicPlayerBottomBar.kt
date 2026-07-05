@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -21,6 +23,8 @@ import com.example.ui.viewmodels.MusicPlayerViewModel
 @Composable
 fun MusicPlayerBottomBar(viewModel: MusicPlayerViewModel) {
     if (viewModel.currentTitle == "No track selected") return
+    
+    val haptic = LocalHapticFeedback.current
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -52,14 +56,20 @@ fun MusicPlayerBottomBar(viewModel: MusicPlayerViewModel) {
                     Text(viewModel.currentTitle, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.onBackground, maxLines = 1)
                     Text(viewModel.currentArtist + " • Premium", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
                 }
-                IconButton(onClick = { viewModel.togglePlayPause() }) {
+                IconButton(onClick = { 
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    viewModel.togglePlayPause() 
+                }) {
                     Icon(
                         if (viewModel.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
                         contentDescription = "Play/Pause",
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
-                IconButton(onClick = { /* next */ }) {
+                IconButton(onClick = { 
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    /* next */ 
+                }) {
                     Icon(Icons.Filled.SkipNext, contentDescription = "Next", tint = MaterialTheme.colorScheme.onBackground)
                 }
             }
