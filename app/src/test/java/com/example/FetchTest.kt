@@ -13,8 +13,11 @@ class FetchTest {
         res.forEach { println(it.trackName + " - " + it.previewUrl) }
         
         if (res.isNotEmpty()) {
-            val stream = YTMusicApi.getStreamUrl(res[0].previewUrl)
-            println("Stream URL: " + stream)
+            val url = res[0].previewUrl
+            if (url != null) {
+                val stream = YTMusicApi.getStreamUrl(url)
+                println("Stream URL: " + stream)
+            }
         }
     }
 }
