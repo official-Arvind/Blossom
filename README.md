@@ -1,21 +1,72 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+  <a href="https://github.com/official-Arvind/Blossom">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=220&section=header&text=Blossom&fontSize=72&fontColor=ffffff&fontAlignY=38&desc=Personalized%20AI%20Music%20Recommendations&descAlignY=58&descSize=22&animation=fadeIn" width="100%"/>
+  </a>
+  <br/>
+
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=700&size=22&duration=3000&pause=800&color=7B61FF&center=true&vCenter=true&multiline=false&width=700&lines=AI+Music+Recommendations+%F0%9F%8E%B5;Smooth+Player+Interface+%E2%96%B6%EF%B8%8F;Built+by+Jigar+Corporation+Pvt+Ltd+%F0%9F%9A%80)](https://github.com/official-Arvind/Blossom)
+
+<br/>
+
+<a href="https://github.com/official-Arvind/Blossom/releases/latest">
+  <img src="https://img.shields.io/github/v/release/official-Arvind/Blossom?style=for-the-badge&logo=github&logoColor=white&label=Latest%20Release&color=FFD700" alt="Latest Release"/>
+</a>
+<a href="https://github.com/official-Arvind/Blossom/stargazers">
+  <img src="https://img.shields.io/github/stars/official-Arvind/Blossom?style=for-the-badge&logo=starship&logoColor=white&color=f7c948" alt="Stars"/>
+</a>
+&nbsp;
+<a href="https://github.com/official-Arvind/Blossom/graphs/contributors">
+  <img src="https://img.shields.io/github/contributors/official-Arvind/Blossom?style=for-the-badge&logo=handshake&logoColor=white&color=22c55e" alt="Contributors"/>
+</a>
+&nbsp;
+<a href="LICENSE.md">
+  <img src="https://img.shields.io/badge/License-FriendlySource-orange?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="License"/>
+</a>
+
+<br/><br/>
+
+> **Your ultimate AI-powered music recommendation engine.**
+> Engineered for music lovers to discover and play their favorite tunes effortlessly.
+
+<br/>
+
 </div>
 
-# Run and deploy your AI Studio app
+---
 
-This contains everything you need to run your app locally.
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=12,20,28&height=4&section=header" width="100%"/>
+</div>
 
-View your app in AI Studio: https://ai.studio/apps/06326038-ef12-43e3-a0af-e9227242e3b2
+## 🛡️ Project Overview
 
-## Run Locally
+**Blossom** is an advanced Android app featuring personalized AI music recommendations and an elegant player interface, crafted meticulously by **Jigar Corporation Pvt Ltd**. 
 
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+We push the boundaries of what's possible with intelligent music suggestions. Blossom doesn't just play music; it curates the perfect soundtrack for every moment using state-of-the-art AI.
 
+## ⚡ Features
 
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
+- **Personalized Recommendations:** Discover new tracks tailored exactly to your listening habits.
+- **Sleek UI:** Modern, immersive, and elegant Jetpack Compose interface.
+- **Smart Playlists:** Dynamic auto-generated playlists adapting to your mood.
+- **God Mode Audio:** Flawless audio playback with robust playback engine.
+
+## 🗂️ Built By
+
+**Jigar Corporation Pvt Ltd**  
+*Building the future of software.*
+
+## 🚀 Getting Started
+
+### Step 1 — Download
+Head to our [Releases](https://github.com/official-Arvind/Blossom/releases) page and download the latest `.apk` file.
+
+### Step 2 — Installation
+Install the APK on your Android device (ensure "Install from Unknown Sources" is enabled in your device settings if needed).
+
+### Step 3 — Engage
+Open Blossom, tune in, and let the AI find your perfect beat.
+
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=12,20,28&height=4&section=header" width="100%"/>
+</div>
