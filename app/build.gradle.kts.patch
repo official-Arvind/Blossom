@@ -1,0 +1,10 @@
+--- app/build.gradle.kts
++++ app/build.gradle.kts
+@@ -48,6 +48,9 @@
+     implementation(libs.androidx.datastore.preferences)
+     implementation(libs.logging.interceptor)
+     implementation(libs.androidx.camera.core)
++    implementation("com.github.MetrolistGroup:MetrolistExtractor:f0a00f5") {
++        exclude(group = "com.google.protobuf")
++    }
+ }

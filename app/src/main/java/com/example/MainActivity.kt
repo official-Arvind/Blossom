@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                 if (isLoggedIn) {
                     MainScreen()
                 } else {
-                    LoginScreen(onLoginSuccess = { isLoggedIn = true })
+                    LoginScreen(onLoginSuccess = { isLoggedIn = true }, onBack = {})
                 }
             }
         }

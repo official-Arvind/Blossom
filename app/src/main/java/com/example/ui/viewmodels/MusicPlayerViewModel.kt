@@ -7,6 +7,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
+
 class MusicPlayerViewModel : ViewModel() {
     private var mediaPlayer: MediaPlayer? = null
     var isPlaying by mutableStateOf(false)
@@ -28,6 +33,17 @@ class MusicPlayerViewModel : ViewModel() {
         currentArtUrl = art
         isPlaying = false
 
+        viewModelScope.launch(Dispatchers.IO) {
+            val streamUrl = com.example.api.YTMusicApi.getStreamUrl(url)
+            withContext(Dispatchers.Main) {
+                if (streamUrl != null) {
+                    playStream(streamUrl)
+                }
+            }
+        }
+    }
+
+    private fun playStream(url: String) {
         mediaPlayer?.release()
         mediaPlayer = MediaPlayer().apply {
             setAudioAttributes(
