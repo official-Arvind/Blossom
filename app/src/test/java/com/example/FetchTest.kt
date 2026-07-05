@@ -1,23 +1,23 @@
 package com.example
 
-import com.example.api.YTMusicApi
+import org.schabi.newpipe.extractor.ServiceList
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class FetchTest {
     @Test
     fun testFetch() = runBlocking {
-        println("Fetching music...")
-        val res = YTMusicApi.searchSongs("top hits pop 2024")
-        println("Result: " + res.size)
-        res.forEach { println(it.trackName + " - " + it.previewUrl) }
+        println(ServiceList.YouTube.serviceInfo.name)
+        try {
+            val ex = ServiceList.YouTube.getSearchExtractor("top hits")
+            ex.fetchPage()
+            println("Found YouTube items: " + ex.initialPage.items.size)
+        } catch(e:Exception) { e.printStackTrace() }
         
-        if (res.isNotEmpty()) {
-            val url = res[0].previewUrl
-            if (url != null) {
-                val stream = YTMusicApi.getStreamUrl(url)
-                println("Stream URL: " + stream)
-            }
-        }
+        try {
+            val ex = ServiceList.YouTubeMusic.getSearchExtractor("top hits")
+            ex.fetchPage()
+            println("Found YouTubeMusic items: " + ex.initialPage.items.size)
+        } catch(e:Exception) { e.printStackTrace() }
     }
 }
