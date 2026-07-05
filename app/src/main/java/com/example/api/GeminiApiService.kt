@@ -73,6 +73,10 @@ object RetrofitClient {
 
 suspend fun suggestSongFromMood(mood: String): String = withContext(Dispatchers.IO) {
     val apiKey = BuildConfig.GEMINI_API_KEY
+    if (apiKey.isEmpty() || apiKey == "MY_GEMINI_API_KEY") {
+        return@withContext "You feel $mood? We recommend 'Electric Feel' by MGMT. (Add your Gemini API Key in Settings to get real AI suggestions!)"
+    }
+    
     val prompt = "The user says they feel: \"$mood\". You are an AI integrated into 'Blossom', a premium music streaming app. Suggest exactly 3 songs that fit this mood. Format the response beautifully as a list. Do not use markdown like bolding or asterisks, just return the list cleanly."
     val request = GenerateContentRequest(
         contents = listOf(
@@ -85,6 +89,6 @@ suspend fun suggestSongFromMood(mood: String): String = withContext(Dispatchers.
         val response = RetrofitClient.service.generateContent(apiKey, request)
         response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text ?: "I couldn't find a song right now. Try again."
     } catch (e: Exception) {
-        "Error connecting to AI: ${e.message}"
+        "Error connecting to AI: ${e.localizedMessage}. Please check your internet connection."
     }
 }

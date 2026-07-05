@@ -39,6 +39,8 @@ import com.example.utils.MusicDownloader
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 
+import com.example.ui.components.bouncyClickable
+
 class HomeViewModel : ViewModel() {
     var popTracks by mutableStateOf<List<ITunesTrack>>(emptyList())
     var rockTracks by mutableStateOf<List<ITunesTrack>>(emptyList())
@@ -262,10 +264,7 @@ fun MediaCard(item: MediaItem, isCircle: Boolean, onClick: () -> Unit, onLongCli
         modifier = Modifier
             .width(if (isCircle) 120.dp else 160.dp)
             .clip(RoundedCornerShape(8.dp))
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick
-            ),
+            .bouncyClickable(onClick = onClick),
         horizontalAlignment = if (isCircle) Alignment.CenterHorizontally else Alignment.Start
     ) {
         AsyncImage(

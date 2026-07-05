@@ -14,6 +14,14 @@ class MusicPlayerViewModel : ViewModel() {
     var currentArtist by mutableStateOf("")
     var currentArtUrl by mutableStateOf("")
 
+    fun playTrack(track: com.example.api.ITunesTrack) {
+        val url = track.previewUrl ?: return
+        val title = track.trackName ?: "Unknown"
+        val artist = track.artistName ?: "Unknown"
+        val art = track.artworkUrl100 ?: ""
+        playTrack(url, title, artist, art)
+    }
+
     fun playTrack(url: String, title: String, artist: String, art: String) {
         currentTitle = title
         currentArtist = artist
