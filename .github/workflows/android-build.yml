@@ -9,6 +9,9 @@ jobs:
   build:
     name: Build Android APK
     runs-on: ubuntu-latest
+    # Force Gradle to use 4GB of RAM so the JVM doesn't choke and crash
+    env:
+      GRADLE_OPTS: "-Dorg.gradle.jvmargs='-Xmx4096m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError'"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
