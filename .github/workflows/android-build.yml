@@ -9,7 +9,6 @@ jobs:
   build:
     name: Build Android APK
     runs-on: ubuntu-latest
-    # Force Gradle to use 4GB of RAM so the JVM doesn't choke and crash
     env:
       GRADLE_OPTS: "-Dorg.gradle.jvmargs='-Xmx4096m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError'"
     steps:
@@ -27,7 +26,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          validate-wrappers: false
+          gradle-version: '8.7' # Forces GitHub to download a fresh Gradle binary
 
       - name: Prepare build environment
         run: |
@@ -44,11 +43,9 @@ jobs:
             echo '{"project_info":{"project_number":"123","project_id":"mock-project"},"client":[{"client_info":{"mobilesdk_app_id":"1:123:android:123","android_client_info":{"package_name":"com.example"}},"api_key":[{"current_key":"mock-key"}],"services":{"appinvite_service":{"other_platform_oauth_client":[]}}}]}' > app/google-services.json
           fi
 
-      - name: Make Gradle Wrapper Executable
-        run: chmod +x ./gradlew
-
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        # Bypassing the local gradlew script and using the fresh system Gradle
+        run: gradle assembleDebug --stacktrace
 
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
