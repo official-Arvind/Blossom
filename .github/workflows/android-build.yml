@@ -26,7 +26,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.7' # Forces GitHub to download a fresh Gradle binary
+          gradle-version: '8.7'
+          validate-wrappers: false
 
       - name: Prepare build environment
         run: |
@@ -44,7 +45,6 @@ jobs:
           fi
 
       - name: Build Debug APK
-        # Bypassing the local gradlew script and using the fresh system Gradle
         run: gradle assembleDebug --stacktrace
 
       - name: Upload APK as Artifact
