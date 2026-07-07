@@ -1,4 +1,4 @@
-name: Build and Publish APK
+name: Ultimate Auto-Healing Build
 
 on:
   push:
@@ -10,46 +10,65 @@ jobs:
     name: Build Android APK
     runs-on: ubuntu-latest
     env:
+      # Maximize memory allocation so the JVM never chokes
       GRADLE_OPTS: "-Dorg.gradle.jvmargs='-Xmx4096m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError'"
     steps:
-      - name: Checkout repository
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: ☕ Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.7'
-          validate-wrappers: false
-
-      - name: Prepare build environment
+      - name: 🛠️ Auto-Heal Diagnostics & Environment Prep
         run: |
-          # Generate keystore if missing
+          echo "==> Running Auto-Heal Scripts..."
+          
+          # 1. Auto-Fix Missing Keystore
           if [ ! -f "debug.keystore" ]; then
-            if [ -f "debug.keystore.base64" ]; then
-              base64 -d debug.keystore.base64 > debug.keystore
-            else
-              keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
-            fi
+            echo "[-] Keystore missing. Generating a fresh one..."
+            keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
           fi
-          # Generate mock google-services.json if missing to prevent build crash
+
+          # 2. Auto-Fix Missing Firebase Config
           if [ ! -f "app/google-services.json" ]; then
+            echo "[-] google-services.json missing. Injecting mock config to prevent crash..."
+            mkdir -p app
             echo '{"project_info":{"project_number":"123","project_id":"mock-project"},"client":[{"client_info":{"mobilesdk_app_id":"1:123:android:123","android_client_info":{"package_name":"com.example"}},"api_key":[{"current_key":"mock-key"}],"services":{"appinvite_service":{"other_platform_oauth_client":[]}}}]}' > app/google-services.json
           fi
 
-      - name: Build Debug APK
+          # 3. Nuke Corrupt Wrappers & Force 9.3.1 Configuration
+          echo "[-] Purging corrupt Gradle wrapper jar..."
+          rm -rf gradle/wrapper/gradle-wrapper.jar
+          
+          echo "[-] Rewriting gradle-wrapper.properties to strictly demand 9.3.1..."
+          mkdir -p gradle/wrapper
+          echo "distributionBase=GRADLE_USER_HOME" > gradle/wrapper/gradle-wrapper.properties
+          echo "distributionPath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-bin.zip" >> gradle/wrapper/gradle-wrapper.properties
+          echo "networkTimeout=10000" >> gradle/wrapper/gradle-wrapper.properties
+          echo "zipStoreBase=GRADLE_USER_HOME" >> gradle/wrapper/gradle-wrapper.properties
+          echo "zipStorePath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+
+      - name: 🚀 Setup Gradle (Strict Version)
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          # Hard-forcing GitHub to download a fresh 9.3.1 binary, bypassing any local corruption
+          gradle-version: '9.3.1'
+          validate-wrappers: false
+
+      - name: 🔨 Compile Debug APK
+        # Using raw 'gradle' command instead of './gradlew' so local scripts can't break it
         run: gradle assembleDebug --stacktrace
 
-      - name: Upload APK as Artifact
+      - name: 📦 Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: Blossom-Debug-APK
+          # Using a wildcard path so it grabs the APK regardless of the exact naming scheme
+          path: app/build/outputs/apk/debug/*.apk
           retention-days: 14
